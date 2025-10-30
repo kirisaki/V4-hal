@@ -70,6 +70,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - hal_uart_bridge.cpp: UART operations (open/close/write/read/available)
   - hal_timer_bridge.cpp: Timer operations (millis/micros/delay_ms/delay_us)
   - Same platform selection mechanism as GPIO bridge
+- Core initialization (`src/common/hal_core.cpp`)
+  - hal_init(): Initialize HAL system with platform hooks
+  - hal_reset(): Reset HAL system to initial state
+  - hal_deinit(): Cleanup and release HAL resources
+  - Weak symbol hooks: hal_platform_init/reset/deinit
+  - Platform implementations can override for custom initialization
 
 ## [0.1.0] - 2025-10-31
 
