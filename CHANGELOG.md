@@ -76,6 +76,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - hal_deinit(): Cleanup and release HAL resources
   - Weak symbol hooks: hal_platform_init/reset/deinit
   - Platform implementations can override for custom initialization
+- Makefile build system
+  - Build libv4hal.a static library
+  - Platform selection: PLATFORM=posix (default)
+  - C++17 flags: -std=c++17 -fno-exceptions -fno-rtti -Os
+  - Targets: all, build, clean, format, format-check, help
+  - Include paths: include/, ports/$(PLATFORM)/
 
 ## [0.1.0] - 2025-10-31
 

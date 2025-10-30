@@ -167,16 +167,16 @@ void PosixPlatform::delay_us_impl(uint32_t us)
 extern "C" const hal_capabilities_t* hal_platform_capabilities(void)
 {
   static const hal_capabilities_t caps = {
-      .gpio_count = 32,
-      .uart_count = 4,
-      .spi_count = 0,
-      .i2c_count = 0,
-      .has_adc = 0,
-      .has_dac = 0,
-      .has_pwm = 0,
-      .has_rtc = 0,
-      .has_dma = 0,
-      .reserved = 0,
+      32,  // gpio_count
+      4,   // uart_count
+      0,   // spi_count
+      0,   // i2c_count
+      0,   // has_adc
+      0,   // has_dac
+      0,   // has_pwm
+      0,   // has_rtc
+      0,   // has_dma
+      0,   // reserved
   };
   return &caps;
 }

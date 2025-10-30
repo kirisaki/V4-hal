@@ -19,16 +19,16 @@
 __attribute__((weak)) const hal_capabilities_t* hal_platform_capabilities(void)
 {
   static const hal_capabilities_t default_caps = {
-      .gpio_count = 0,
-      .uart_count = 0,
-      .spi_count = 0,
-      .i2c_count = 0,
-      .has_adc = 0,
-      .has_dac = 0,
-      .has_pwm = 0,
-      .has_rtc = 0,
-      .has_dma = 0,
-      .reserved = 0,
+      0,  // gpio_count
+      0,  // uart_count
+      0,  // spi_count
+      0,  // i2c_count
+      0,  // has_adc
+      0,  // has_dac
+      0,  // has_pwm
+      0,  // has_rtc
+      0,  // has_dma
+      0,  // reserved
   };
   return &default_caps;
 }
