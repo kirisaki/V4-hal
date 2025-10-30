@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+- Directory structure for C++17 implementation
+  - `src/internal/` for C++17 templates
+  - `src/bridge/` for extern "C" bridge layer
+  - `src/common/` for core implementation
+  - `ports/posix/` for POSIX platform
+  - `examples/blink/` for examples
+  - `tests/unit/` for unit tests
+- Implementation architecture documentation in README
+- Design principles (CRTP, zero-cost abstractions, RAII)
+
 ## [0.1.0] - 2025-10-31
 
 ### Added

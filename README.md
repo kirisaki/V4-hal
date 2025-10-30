@@ -23,6 +23,77 @@ V4-front (Forth compiler)
 V4-repl (Interactive REPL)
 ```
 
+### Implementation Architecture
+
+V4-hal uses a layered architecture with C++17 internal implementation and extern "C" API:
+
+```
+┌─────────────────────────────────────────┐
+│  Application (C/C++)                    │
+├─────────────────────────────────────────┤
+│  extern "C" API (hal.h, v4_hal.h)      │
+├─────────────────────────────────────────┤
+│  C API Bridge (src/bridge/)            │
+│  - hal_gpio_bridge.cpp                 │
+│  - hal_uart_bridge.cpp                 │
+│  - hal_timer_bridge.cpp                │
+├─────────────────────────────────────────┤
+│  C++17 Internal Layer (src/internal/)  │
+│  - CRTP templates                      │
+│  - Zero-cost abstractions              │
+│  - Type-safe wrappers                  │
+├─────────────────────────────────────────┤
+│  Platform Layer (ports/)               │
+│  - posix/    (Linux/macOS)            │
+│  - esp32/    (ESP32-C6)               │
+│  - ch32v203/ (CH32V203)               │
+└─────────────────────────────────────────┘
+```
+
+**Design Principles:**
+- **External Interface**: Pure C API (extern "C") for maximum compatibility
+- **Internal Implementation**: C++17 with templates, CRTP, and RAII
+- **Zero Cost**: No exceptions, no RTTI, inline templates
+- **Type Safety**: Compile-time checks with C++ type system
+- **Resource Efficiency**: Stack-only, no dynamic allocation
+
+## Directory Structure
+
+```
+V4-hal/
+├── include/v4/           # Public API headers
+│   ├── v4_hal.h         # Legacy C API
+│   ├── hal.h            # Unified C++17 API (planned)
+│   ├── hal_types.h      # Type definitions (planned)
+│   ├── hal_error.h      # Error codes (planned)
+│   └── hal_capabilities.h  # Capability system (planned)
+├── src/
+│   ├── internal/        # C++17 templates (planned)
+│   │   ├── gpio_impl.hpp
+│   │   ├── uart_impl.hpp
+│   │   └── timer_impl.hpp
+│   ├── bridge/          # extern "C" bridge (planned)
+│   │   ├── hal_gpio_bridge.cpp
+│   │   ├── hal_uart_bridge.cpp
+│   │   └── hal_timer_bridge.cpp
+│   └── common/          # Core implementation (planned)
+│       ├── hal_core.cpp
+│       └── hal_capabilities.cpp
+├── ports/               # Platform implementations (planned)
+│   ├── posix/          # Linux/macOS
+│   ├── esp32/          # ESP32-C6
+│   └── ch32v203/       # CH32V203
+├── tests/
+│   ├── mock_hal.cpp    # Mock implementation
+│   ├── test_mock_hal.cpp  # Unit tests
+│   └── unit/           # Additional tests (planned)
+├── examples/
+│   └── blink/          # LED blink example (planned)
+└── docs/               # Documentation
+    ├── hal-api.md
+    └── sys-opcodes.md
+```
+
 ## Features
 
 - Minimal API surface for embedded systems
