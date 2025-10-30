@@ -28,6 +28,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Resource count queries (GPIO, UART, SPI, I2C)
   - Feature flags (ADC, DAC, PWM, RTC, DMA)
   - Weak symbol pattern for platform customization
+- Unified HAL API header (`include/v4/hal.h`)
+  - Complete API: GPIO, UART, Timer, System control
+  - GPIO interrupts (attach, detach, enable, disable)
+  - UART handle-based API
+  - Initialization and reset functions
+  - Comprehensive documentation
 
 ## [0.1.0] - 2025-10-31
 
