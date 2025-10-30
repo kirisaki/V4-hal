@@ -23,6 +23,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Opaque handle type
 - Error code definitions (`include/v4/hal_error.h`)
   - Standard error codes (OK, PARAM, BUSY, TIMEOUT, etc.)
+- Capability system (`include/v4/hal_capabilities.h`, `src/common/hal_capabilities.cpp`)
+  - Runtime platform feature discovery
+  - Resource count queries (GPIO, UART, SPI, I2C)
+  - Feature flags (ADC, DAC, PWM, RTC, DMA)
+  - Weak symbol pattern for platform customization
 
 ## [0.1.0] - 2025-10-31
 

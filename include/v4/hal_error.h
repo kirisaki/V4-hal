@@ -9,12 +9,12 @@
  * 0 indicates success, negative values indicate errors.
  */
 
-#define HAL_OK           0  /**< Success */
-#define HAL_ERR_PARAM   -1  /**< Invalid parameter */
-#define HAL_ERR_BUSY    -2  /**< Resource busy */
-#define HAL_ERR_TIMEOUT -3  /**< Operation timed out */
-#define HAL_ERR_NODEV   -4  /**< Device not found */
-#define HAL_ERR_NOMEM   -5  /**< Out of memory */
-#define HAL_ERR_NOTSUP  -6  /**< Feature not supported */
+#define HAL_OK 0           /**< Success */
+#define HAL_ERR_PARAM -1   /**< Invalid parameter */
+#define HAL_ERR_BUSY -2    /**< Resource busy */
+#define HAL_ERR_TIMEOUT -3 /**< Operation timed out */
+#define HAL_ERR_NODEV -4   /**< Device not found */
+#define HAL_ERR_NOMEM -5   /**< Out of memory */
+#define HAL_ERR_NOTSUP -6  /**< Feature not supported */
 
-#endif // V4_HAL_ERROR_H
+#endif  // V4_HAL_ERROR_H
