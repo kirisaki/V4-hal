@@ -17,6 +17,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `tests/unit/` for unit tests
 - Implementation architecture documentation in README
 - Design principles (CRTP, zero-cost abstractions, RAII)
+- Type definitions (`include/v4/hal_types.h`)
+  - GPIO types: mode, value, IRQ edge, IRQ handler
+  - UART types: config structure
+  - Opaque handle type
+- Error code definitions (`include/v4/hal_error.h`)
+  - Standard error codes (OK, PARAM, BUSY, TIMEOUT, etc.)
 
 ## [0.1.0] - 2025-10-31
 
