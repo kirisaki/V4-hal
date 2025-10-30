@@ -34,6 +34,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - UART handle-based API
   - Initialization and reset functions
   - Comprehensive documentation
+- GPIO internal layer with CRTP (`src/internal/gpio_impl.hpp`)
+  - GpioBase<Platform>: CRTP base class for GPIO operations
+  - Zero-cost abstraction with compile-time polymorphism
+  - Parameter validation (pin bounds checking)
+  - Toggle operation (atomic read-modify-write)
+  - GpioPin<Platform>: RAII wrapper for safe pin management
+  - Move semantics support, copy prohibited
 
 ## [0.1.0] - 2025-10-31
 
