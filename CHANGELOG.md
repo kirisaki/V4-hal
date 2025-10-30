@@ -61,6 +61,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Timer using clock_gettime(CLOCK_MONOTONIC)
   - Platform capabilities: 32 GPIO, 4 UART ports
   - Compile-time constants: max_gpio_pins(), max_uart_ports()
+- extern "C" bridge layer for GPIO (`src/bridge/hal_gpio_bridge.cpp`)
+  - Bridges C API (hal.h) to C++17 internal implementation
+  - Platform selection via compile-time macros
+  - hal_gpio_mode/write/read/toggle implementations
+  - GPIO interrupt stubs (HAL_ERR_NOTSUP)
 
 ## [0.1.0] - 2025-10-31
 
