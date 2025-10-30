@@ -66,6 +66,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Platform selection via compile-time macros
   - hal_gpio_mode/write/read/toggle implementations
   - GPIO interrupt stubs (HAL_ERR_NOTSUP)
+- extern "C" bridge layer for UART and Timer (`src/bridge/`)
+  - hal_uart_bridge.cpp: UART operations (open/close/write/read/available)
+  - hal_timer_bridge.cpp: Timer operations (millis/micros/delay_ms/delay_us)
+  - Same platform selection mechanism as GPIO bridge
 
 ## [0.1.0] - 2025-10-31
 
