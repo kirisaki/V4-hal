@@ -41,6 +41,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Toggle operation (atomic read-modify-write)
   - GpioPin<Platform>: RAII wrapper for safe pin management
   - Move semantics support, copy prohibited
+- UART internal layer with CRTP (`src/internal/uart_impl.hpp`)
+  - UartBase<Platform>: CRTP base class for UART operations
+  - Handle-based API for multiple port management
+  - UartHandle: Opaque handle structure with platform data
+  - open/close/write/read/available operations
+  - Uart<Platform>: RAII wrapper with automatic resource cleanup
+  - Move semantics support, copy prohibited
 
 ## [0.1.0] - 2025-10-31
 
