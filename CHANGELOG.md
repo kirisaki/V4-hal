@@ -54,6 +54,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - micros(): Get microseconds since startup (64-bit)
   - delay_ms()/delay_us(): Blocking delays
   - elapsed_ms()/elapsed_us(): Helper functions for time measurement
+- POSIX platform implementation (`ports/posix/`)
+  - PosixPlatform: CRTP implementation for Linux/macOS/BSD
+  - GPIO simulation using bitmaps (32 pins)
+  - UART using stdout/stdin (4 ports)
+  - Timer using clock_gettime(CLOCK_MONOTONIC)
+  - Platform capabilities: 32 GPIO, 4 UART ports
+  - Compile-time constants: max_gpio_pins(), max_uart_ports()
 
 ## [0.1.0] - 2025-10-31
 
