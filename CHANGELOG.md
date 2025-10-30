@@ -48,6 +48,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - open/close/write/read/available operations
   - Uart<Platform>: RAII wrapper with automatic resource cleanup
   - Move semantics support, copy prohibited
+- Timer internal layer with CRTP (`src/internal/timer_impl.hpp`)
+  - TimerBase<Platform>: CRTP base class for timer operations
+  - millis(): Get milliseconds since startup (32-bit, wraps after 49 days)
+  - micros(): Get microseconds since startup (64-bit)
+  - delay_ms()/delay_us(): Blocking delays
+  - elapsed_ms()/elapsed_us(): Helper functions for time measurement
 
 ## [0.1.0] - 2025-10-31
 
