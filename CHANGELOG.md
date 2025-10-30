@@ -76,12 +76,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - hal_deinit(): Cleanup and release HAL resources
   - Weak symbol hooks: hal_platform_init/reset/deinit
   - Platform implementations can override for custom initialization
-- Makefile build system
-  - Build libv4hal.a static library
+- Makefile build system (CMake wrapper)
+  - CMake wrapper with convenient targets
+  - Targets: build (debug), release, test, clean, format, format-check, help
   - Platform selection: PLATFORM=posix (default)
-  - C++17 flags: -std=c++17 -fno-exceptions -fno-rtti -Os
-  - Targets: all, build, clean, format, format-check, help
-  - Include paths: include/, ports/$(PLATFORM)/
+  - Options: V4_HAL_BUILD_TESTS, V4_HAL_BUILD_EXAMPLES, V4_HAL_BUILD_MOCK
+- CMakeLists.txt updates
+  - v4-hal-lib static library target with all C++17 CRTP sources
+  - Platform selection via HAL_PLATFORM cache variable
+  - Compiler flags: -std=c++17 -fno-exceptions -fno-rtti -Os
+  - Fixed C++17 compatibility (aggregate initialization without designators)
+  - libv4-hal-lib.a: 95KB static library (contains all peripheral implementations)
+- Blink example (`examples/blink/`)
+  - Demonstrates GPIO and Timer API usage
+  - Simple LED blink pattern with 1s interval
+  - Shows hal_init/deinit lifecycle
+  - Platform capability queries
+  - Binary footprint: 49KB (with debug symbols), actual runtime: ~5.7KB
+  - Demonstrates linker dead code elimination (95KB library → 5.7KB binary)
 
 ## [0.1.0] - 2025-10-31
 

@@ -94,6 +94,13 @@ if(V4_HAL_BUILD_TESTS)
   add_test(NAME test_hal COMMAND test_hal)
 endif()
 
+# Optional: Build examples
+option(V4_HAL_BUILD_EXAMPLES "Build HAL examples" OFF)
+
+if(V4_HAL_BUILD_EXAMPLES)
+  add_subdirectory(examples/blink)
+endif()
+
 # Installation
 install(DIRECTORY include/ DESTINATION include)
 install(FILES LICENSE-MIT LICENSE-APACHE README.md DESTINATION share/doc/v4-hal)
