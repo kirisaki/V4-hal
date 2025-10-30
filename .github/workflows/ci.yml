@@ -1,0 +1,195 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  formatting:
+    name: Code Formatting Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install clang-format
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Check C/C++ formatting
+        run: make format-check
+
+  build-and-test:
+    name: ${{ matrix.os }} - ${{ matrix.build_type }}
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+        build_type: [Debug, Release]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Install dependencies (Ubuntu)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang-format
+
+      - name: Build library
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+            -DV4_HAL_BUILD_MOCK=OFF \
+            -DV4_HAL_BUILD_TESTS=OFF \
+            -DV4_HAL_BUILD_EXAMPLES=ON \
+            -DHAL_PLATFORM=posix
+          cmake --build build -j
+
+      - name: Run blink example
+        run: build/examples/blink/blink
+
+      - name: Check library size (Release only)
+        if: matrix.build_type == 'Release'
+        run: |
+          echo "=== Library Size ==="
+          ls -lh build/libv4-hal-lib.a
+          size build/libv4-hal-lib.a
+          echo ""
+          echo "=== Blink Example Size ==="
+          ls -lh build/examples/blink/blink
+          size build/examples/blink/blink
+
+  build-options:
+    name: Build Options - ${{ matrix.config.name }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - name: "Library only"
+            mock: "OFF"
+            tests: "OFF"
+            examples: "OFF"
+          - name: "With mock HAL"
+            mock: "ON"
+            tests: "OFF"
+            examples: "OFF"
+          - name: "With examples"
+            mock: "OFF"
+            tests: "OFF"
+            examples: "ON"
+          - name: "With tests and mock"
+            mock: "ON"
+            tests: "ON"
+            examples: "OFF"
+          - name: "Full build"
+            mock: "ON"
+            tests: "ON"
+            examples: "ON"
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Configure CMake
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DV4_HAL_BUILD_MOCK=${{ matrix.config.mock }} \
+            -DV4_HAL_BUILD_TESTS=${{ matrix.config.tests }} \
+            -DV4_HAL_BUILD_EXAMPLES=${{ matrix.config.examples }} \
+            -DHAL_PLATFORM=posix
+
+      - name: Build
+        run: cmake --build build -j
+
+      - name: Check outputs
+        run: |
+          echo "=== Build outputs ==="
+          ls -lh build/libv4-hal-lib.a || echo "libv4-hal-lib.a not found"
+          ls -lh build/libv4-hal-mock.a 2>/dev/null || echo "libv4-hal-mock.a not built (expected for mock=OFF)"
+          ls -lh build/test_hal 2>/dev/null || echo "test_hal not built (expected for tests=OFF)"
+          ls -lh build/examples/blink/blink 2>/dev/null || echo "blink not built (expected for examples=OFF)"
+
+  sanitizers:
+    name: Sanitizers - ${{ matrix.sanitizer }}
+    runs-on: ubuntu-latest
+
+    strategy:
+      fail-fast: false
+      matrix:
+        sanitizer: [address, undefined]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup CMake
+        uses: lukka/get-cmake@latest
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y clang
+
+      - name: Configure CMake with sanitizers
+        env:
+          CC: clang
+          CXX: clang++
+        run: |
+          cmake -B build \
+            -DCMAKE_BUILD_TYPE=Debug \
+            -DV4_HAL_BUILD_EXAMPLES=ON \
+            -DHAL_PLATFORM=posix \
+            -DCMAKE_CXX_FLAGS="-fsanitize=${{ matrix.sanitizer }} -fno-omit-frame-pointer -g"
+
+      - name: Build
+        run: cmake --build build -j
+
+      - name: Run blink example with sanitizer
+        run: build/examples/blink/blink
+
+  makefile-wrapper:
+    name: Makefile Wrapper Test
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake clang-format
+
+      - name: Test make build
+        run: make build
+
+      - name: Test make format-check
+        run: make format-check
+
+      - name: Test make clean
+        run: make clean
+
+      - name: Test make release
+        run: make release PLATFORM=posix
+
+      - name: Verify release outputs
+        run: |
+          ls -lh build-release/libv4-hal-lib.a
+          echo "Release build successful!"
