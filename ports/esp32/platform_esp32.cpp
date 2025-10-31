@@ -9,12 +9,13 @@
 
 // ESP-IDF includes
 #ifdef HAL_PLATFORM_ESP32
+#include <cstdio>
+
 #include "driver/gpio.h"
 #include "driver/uart.h"
 #include "esp_timer.h"
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
-#include <cstdio>
 #endif
 
 namespace v4
@@ -137,7 +138,7 @@ hal_handle_t Esp32Platform::uart_open_impl(int port, const hal_uart_config_t* co
       .source_clk = UART_SCLK_DEFAULT,
   };
 
-  uart_num_t uart_num = static_cast<uart_num_t>(port);
+  uart_port_t uart_num = static_cast<uart_port_t>(port);
 
   if (uart_param_config(uart_num, &uart_config) != ESP_OK)
     return nullptr;
@@ -169,7 +170,7 @@ int Esp32Platform::uart_close_impl(hal_handle_t handle)
   if (!uart_init_flags[port])
     return HAL_OK;  // Already closed
 
-  uart_num_t uart_num = static_cast<uart_num_t>(port);
+  uart_port_t uart_num = static_cast<uart_port_t>(port);
 
   if (uart_driver_delete(uart_num) != ESP_OK)
     return HAL_ERR_IO;
@@ -190,7 +191,7 @@ int Esp32Platform::uart_write_impl(hal_handle_t handle, const uint8_t* buf, size
   if (!uart_init_flags[port])
     return HAL_ERR_NODEV;
 
-  uart_num_t uart_num = static_cast<uart_num_t>(port);
+  uart_port_t uart_num = static_cast<uart_port_t>(port);
 
   int written = uart_write_bytes(uart_num, buf, len);
   return (written >= 0) ? written : HAL_ERR_IO;
@@ -208,7 +209,7 @@ int Esp32Platform::uart_read_impl(hal_handle_t handle, uint8_t* buf, size_t len)
   if (!uart_init_flags[port])
     return HAL_ERR_NODEV;
 
-  uart_num_t uart_num = static_cast<uart_num_t>(port);
+  uart_port_t uart_num = static_cast<uart_port_t>(port);
 
   // Non-blocking read with 0 timeout
   int bytes_read = uart_read_bytes(uart_num, buf, len, 0);
@@ -227,7 +228,7 @@ int Esp32Platform::uart_available_impl(hal_handle_t handle)
   if (!uart_init_flags[port])
     return HAL_ERR_NODEV;
 
-  uart_num_t uart_num = static_cast<uart_num_t>(port);
+  uart_port_t uart_num = static_cast<uart_port_t>(port);
 
   size_t available = 0;
   if (uart_get_buffered_data_len(uart_num, &available) != ESP_OK)
