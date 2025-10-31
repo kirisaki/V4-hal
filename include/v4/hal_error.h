@@ -16,5 +16,6 @@
 #define HAL_ERR_NODEV -4   /**< Device not found */
 #define HAL_ERR_NOMEM -5   /**< Out of memory */
 #define HAL_ERR_NOTSUP -6  /**< Feature not supported */
+#define HAL_ERR_IO -7      /**< I/O error */
 
 #endif  // V4_HAL_ERROR_H

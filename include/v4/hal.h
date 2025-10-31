@@ -227,6 +227,34 @@ extern "C"
    */
   void hal_delay_us(uint32_t us);
 
+  /* ========================================================================= */
+  /* Console I/O API                                                           */
+  /* ========================================================================= */
+
+  /**
+   * @brief Write data to console output
+   *
+   * Writes bytes to the standard console output (typically stdout or UART0).
+   * Blocks until all data is written.
+   *
+   * @param buf Data buffer
+   * @param len Number of bytes to write
+   * @return Number of bytes written on success, negative error code on failure
+   */
+  int hal_console_write(const uint8_t* buf, size_t len);
+
+  /**
+   * @brief Read data from console input
+   *
+   * Reads up to len bytes from the standard console input (typically stdin or UART0).
+   * Blocking: waits until at least one byte is available.
+   *
+   * @param buf Destination buffer
+   * @param len Maximum bytes to read
+   * @return Number of bytes read on success, negative error code on failure
+   */
+  int hal_console_read(uint8_t* buf, size_t len);
+
 #ifdef __cplusplus
 }
 #endif

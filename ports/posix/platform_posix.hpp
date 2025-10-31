@@ -180,6 +180,32 @@ struct PosixPlatform
    * @param us Microseconds to delay
    */
   static void delay_us_impl(uint32_t us);
+
+  /* ======================================================================= */
+  /* Console I/O Implementation                                              */
+  /* ======================================================================= */
+
+  /**
+   * @brief Write data to console output
+   *
+   * Uses write(STDOUT_FILENO).
+   *
+   * @param buf Data buffer
+   * @param len Number of bytes to write
+   * @return Number of bytes written
+   */
+  static int console_write_impl(const uint8_t* buf, size_t len);
+
+  /**
+   * @brief Read data from console input
+   *
+   * Uses read(STDIN_FILENO). Blocking read.
+   *
+   * @param buf Destination buffer
+   * @param len Maximum bytes to read
+   * @return Number of bytes read
+   */
+  static int console_read_impl(uint8_t* buf, size_t len);
 };
 
 }  // namespace hal

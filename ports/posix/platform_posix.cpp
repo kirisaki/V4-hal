@@ -157,6 +157,24 @@ void PosixPlatform::delay_us_impl(uint32_t us)
   usleep(us);
 }
 
+/* ========================================================================= */
+/* Console I/O Implementation                                                */
+/* ========================================================================= */
+
+int PosixPlatform::console_write_impl(const uint8_t* buf, size_t len)
+{
+  // Write to stdout using POSIX write()
+  ssize_t written = write(STDOUT_FILENO, buf, len);
+  return (written >= 0) ? static_cast<int>(written) : HAL_ERR_IO;
+}
+
+int PosixPlatform::console_read_impl(uint8_t* buf, size_t len)
+{
+  // Read from stdin using POSIX read() - blocking
+  ssize_t bytes_read = read(STDIN_FILENO, buf, len);
+  return (bytes_read >= 0) ? static_cast<int>(bytes_read) : HAL_ERR_IO;
+}
+
 }  // namespace hal
 }  // namespace v4
 
