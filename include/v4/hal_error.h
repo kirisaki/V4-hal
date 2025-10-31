@@ -7,15 +7,36 @@
  *
  * All HAL functions return int (v4_err compatible).
  * 0 indicates success, negative values indicate errors.
+ *
+ * Error codes are defined using X-macro pattern in hal_errors.def.
  */
 
-#define HAL_OK 0           /**< Success */
-#define HAL_ERR_PARAM -1   /**< Invalid parameter */
-#define HAL_ERR_BUSY -2    /**< Resource busy */
-#define HAL_ERR_TIMEOUT -3 /**< Operation timed out */
-#define HAL_ERR_NODEV -4   /**< Device not found */
-#define HAL_ERR_NOMEM -5   /**< Out of memory */
-#define HAL_ERR_NOTSUP -6  /**< Feature not supported */
-#define HAL_ERR_IO -7      /**< I/O error */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+  // Define error codes using X-macro
+#define HAL_ERR(name, val, desc) HAL_ERR_##name = val,
+  enum
+  {
+#include "hal_errors.def"
+  };
+#undef HAL_ERR
+
+  // Define HAL_OK as alias for HAL_ERR_OK
+#define HAL_OK HAL_ERR_OK
+
+  /**
+   * @brief Get error message string
+   *
+   * @param err Error code
+   * @return Human-readable error description
+   */
+  const char* hal_strerror(int err);
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif  // V4_HAL_ERROR_H
