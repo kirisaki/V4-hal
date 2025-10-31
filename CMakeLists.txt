@@ -28,8 +28,12 @@ set_property(CACHE HAL_PLATFORM PROPERTY STRINGS posix esp32 ch32v203)
 # Static library with C++17 CRTP implementation
 add_library(
   v4-hal-lib STATIC
-  src/common/hal_capabilities.cpp src/common/hal_core.cpp src/common/hal_error.cpp
-  src/bridge/hal_gpio_bridge.cpp src/bridge/hal_uart_bridge.cpp src/bridge/hal_timer_bridge.cpp
+  src/common/hal_capabilities.cpp
+  src/common/hal_core.cpp
+  src/common/hal_error.cpp
+  src/bridge/hal_gpio_bridge.cpp
+  src/bridge/hal_uart_bridge.cpp
+  src/bridge/hal_timer_bridge.cpp
   src/bridge/hal_console_bridge.cpp)
 
 # Platform-specific sources
