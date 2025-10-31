@@ -28,8 +28,8 @@ set_property(CACHE HAL_PLATFORM PROPERTY STRINGS posix esp32 ch32v203)
 # Static library with C++17 CRTP implementation
 add_library(
   v4-hal-lib STATIC
-  src/common/hal_capabilities.cpp src/common/hal_core.cpp src/bridge/hal_gpio_bridge.cpp
-  src/bridge/hal_uart_bridge.cpp src/bridge/hal_timer_bridge.cpp
+  src/common/hal_capabilities.cpp src/common/hal_core.cpp src/common/hal_error.cpp
+  src/bridge/hal_gpio_bridge.cpp src/bridge/hal_uart_bridge.cpp src/bridge/hal_timer_bridge.cpp
   src/bridge/hal_console_bridge.cpp)
 
 # Platform-specific sources
@@ -86,13 +86,20 @@ if(V4_HAL_BUILD_TESTS)
     GIT_TAG master)
   fetchcontent_makeavailable(doctest)
 
-  # Test executable
+  # Test executable (C API)
   add_executable(test_hal tests/test_mock_hal.cpp)
   target_link_libraries(test_hal PRIVATE v4-hal-mock doctest::doctest)
   target_compile_options(test_hal PRIVATE -Wall -Wextra -Wpedantic -fno-exceptions
                                           -fno-rtti)
 
   add_test(NAME test_hal COMMAND test_hal)
+
+  # Test executable (C++ API)
+  add_executable(test_hal_cpp tests/test_hal_cpp.cpp)
+  target_link_libraries(test_hal_cpp PRIVATE v4-hal-lib doctest::doctest)
+  target_compile_options(test_hal_cpp PRIVATE -Wall -Wextra -Wpedantic -fno-rtti)
+
+  add_test(NAME test_hal_cpp COMMAND test_hal_cpp)
 endif()
 
 # Optional: Build examples
