@@ -14,7 +14,6 @@ using Critical = v4::hal::CriticalImpl<Platform>;
 
 extern "C"
 {
-
   void hal_critical_enter(void)
   {
     Critical::critical_enter();
