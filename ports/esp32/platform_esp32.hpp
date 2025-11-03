@@ -86,6 +86,13 @@ struct Esp32Platform
 
   static int console_write_impl(const uint8_t* buf, size_t len);
   static int console_read_impl(uint8_t* buf, size_t len);
+
+  /* ======================================================================= */
+  /* Interrupt Control Implementation                                        */
+  /* ======================================================================= */
+
+  static void critical_enter_impl();
+  static void critical_exit_impl();
 };
 
 }  // namespace hal

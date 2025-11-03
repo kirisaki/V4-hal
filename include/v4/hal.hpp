@@ -387,5 +387,77 @@ inline int console_read(uint8_t* buf, size_t len)
   return ret;
 }
 
+/* ========================================================================= */
+/* Interrupt Control utilities                                               */
+/* ========================================================================= */
+
+/**
+ * @brief Enter critical section (disable interrupts)
+ *
+ * Disables interrupts to protect shared resources.
+ * Must be paired with critical_exit().
+ *
+ * Example:
+ * @code
+ * v4::hal::critical_enter();
+ * // Protected code
+ * shared_counter++;
+ * v4::hal::critical_exit();
+ * @endcode
+ */
+inline void critical_enter()
+{
+  hal_critical_enter();
+}
+
+/**
+ * @brief Exit critical section (enable interrupts)
+ *
+ * Re-enables interrupts after critical section.
+ * Must be paired with critical_enter().
+ */
+inline void critical_exit()
+{
+  hal_critical_exit();
+}
+
+/**
+ * @brief RAII wrapper for critical section
+ *
+ * Automatically enters critical section on construction
+ * and exits on destruction.
+ *
+ * Example:
+ * @code
+ * {
+ *   v4::hal::CriticalSection cs;  // Enters critical section
+ *   shared_data++;
+ * }  // Exits critical section automatically
+ * @endcode
+ */
+class CriticalSection
+{
+ public:
+  /**
+   * @brief Enter critical section
+   */
+  CriticalSection()
+  {
+    hal_critical_enter();
+  }
+
+  /**
+   * @brief Exit critical section
+   */
+  ~CriticalSection()
+  {
+    hal_critical_exit();
+  }
+
+  // Non-copyable
+  CriticalSection(const CriticalSection&) = delete;
+  CriticalSection& operator=(const CriticalSection&) = delete;
+};
+
 }  // namespace hal
 }  // namespace v4

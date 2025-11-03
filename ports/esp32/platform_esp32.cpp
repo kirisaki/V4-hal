@@ -303,6 +303,26 @@ int Esp32Platform::console_read_impl(uint8_t* buf, size_t len)
   return (bytes_read >= 0) ? bytes_read : HAL_ERR_IO;
 }
 
+/* ========================================================================= */
+/* Interrupt Control Implementation                                          */
+/* ========================================================================= */
+
+// Static spinlock for critical sections
+static portMUX_TYPE critical_spinlock = portMUX_INITIALIZER_UNLOCKED;
+
+void Esp32Platform::critical_enter_impl()
+{
+  // Use FreeRTOS spinlock (disables interrupts on current core)
+  // Supports nesting - each enter must be paired with exit
+  portENTER_CRITICAL(&critical_spinlock);
+}
+
+void Esp32Platform::critical_exit_impl()
+{
+  // Re-enable interrupts
+  portEXIT_CRITICAL(&critical_spinlock);
+}
+
 #else  // !HAL_PLATFORM_ESP32
 
 /* Stub implementations for non-ESP32 builds */
@@ -357,6 +377,8 @@ int Esp32Platform::console_read_impl(uint8_t*, size_t)
 {
   return HAL_ERR_NOTSUP;
 }
+void Esp32Platform::critical_enter_impl() {}
+void Esp32Platform::critical_exit_impl() {}
 
 #endif  // HAL_PLATFORM_ESP32
 

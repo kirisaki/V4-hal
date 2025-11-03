@@ -1,5 +1,6 @@
 #include "platform_posix.hpp"
 
+#include <pthread.h>
 #include <time.h>
 #include <unistd.h>
 
@@ -173,6 +174,25 @@ int PosixPlatform::console_read_impl(uint8_t* buf, size_t len)
   // Read from stdin using POSIX read() - blocking
   ssize_t bytes_read = read(STDIN_FILENO, buf, len);
   return (bytes_read >= 0) ? static_cast<int>(bytes_read) : HAL_ERR_IO;
+}
+
+/* ========================================================================= */
+/* Interrupt Control Implementation                                          */
+/* ========================================================================= */
+
+// Static mutex for critical sections
+static pthread_mutex_t critical_mutex = PTHREAD_MUTEX_INITIALIZER;
+
+void PosixPlatform::critical_enter_impl()
+{
+  // Use pthread_mutex for thread-safe critical sections
+  pthread_mutex_lock(&critical_mutex);
+}
+
+void PosixPlatform::critical_exit_impl()
+{
+  // Release mutex
+  pthread_mutex_unlock(&critical_mutex);
 }
 
 }  // namespace hal

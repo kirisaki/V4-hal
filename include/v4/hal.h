@@ -228,6 +228,41 @@ extern "C"
   void hal_delay_us(uint32_t us);
 
   /* ========================================================================= */
+  /* Interrupt Control API                                                     */
+  /* ========================================================================= */
+
+  /**
+   * @brief Enter critical section (disable interrupts)
+   *
+   * Disables interrupts to protect shared resources from concurrent access.
+   * Must support nesting (multiple enter/exit pairs).
+   *
+   * Platform implementations:
+   * - FreeRTOS: portENTER_CRITICAL()
+   * - ARM Cortex-M: __disable_irq()
+   * - RISC-V: clear mstatus.MIE bit
+   * - POSIX: pthread_mutex_lock()
+   *
+   * Example:
+   * @code
+   * hal_critical_enter();
+   * // Protected code section
+   * shared_var++;
+   * hal_critical_exit();
+   * @endcode
+   */
+  void hal_critical_enter(void);
+
+  /**
+   * @brief Exit critical section (enable interrupts)
+   *
+   * Re-enables interrupts after a critical section.
+   * Must be paired with hal_critical_enter().
+   * Supports nesting - interrupts only re-enabled when all pairs are balanced.
+   */
+  void hal_critical_exit(void);
+
+  /* ========================================================================= */
   /* Console I/O API                                                           */
   /* ========================================================================= */
 

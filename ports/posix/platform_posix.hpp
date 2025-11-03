@@ -206,6 +206,24 @@ struct PosixPlatform
    * @return Number of bytes read
    */
   static int console_read_impl(uint8_t* buf, size_t len);
+
+  /* ======================================================================= */
+  /* Interrupt Control Implementation                                        */
+  /* ======================================================================= */
+
+  /**
+   * @brief Enter critical section
+   *
+   * Uses pthread_mutex for thread safety on POSIX systems.
+   */
+  static void critical_enter_impl();
+
+  /**
+   * @brief Exit critical section
+   *
+   * Releases pthread_mutex.
+   */
+  static void critical_exit_impl();
 };
 
 }  // namespace hal
